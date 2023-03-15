@@ -5,8 +5,8 @@ const UmkmController = require('../controllers/UmkmController');
 const authenticate = require('../middleware/authenticate');
 
 router.get('/', UmkmController.getAll);
-router.post('/create', UmkmController.createUmkm);
-router.post('/delete', UmkmController.deleteUmkm);
-router.post('/update', UmkmController.updateUmkm);
+router.post('/create', authenticate, UmkmController.createUmkm);
+router.post('/delete', authenticate, UmkmController.deleteUmkm);
+router.post('/update', authenticate, UmkmController.updateUmkm);
 
 module.exports = router;
