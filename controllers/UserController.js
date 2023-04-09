@@ -16,6 +16,16 @@ const getAll = async (req, res, next) => {
   }
 };
 
+// Get User By ID
+const getUserById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.body.id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 // Register
 const register = async (req, res, next) => {
   const newUser = new User({
@@ -107,6 +117,7 @@ const updateUser = async (req, res) => {
 
 module.exports = {
   getAll,
+  getUserById,
   register,
   login,
   deleteUser,

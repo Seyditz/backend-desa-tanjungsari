@@ -14,6 +14,16 @@ const getAll = async (req, res, next) => {
   }
 };
 
+// Get Post By ID
+const getPostById = async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.body.id);
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 // Create Post
 const createPost = async (req, res, next) => {
   console.log(req.body);
@@ -70,6 +80,7 @@ const updatePost = async (req, res) => {
 
 module.exports = {
   getAll,
+  getPostById,
   createPost,
   deletePost,
   updatePost

@@ -14,6 +14,16 @@ const getAll = async (req, res, next) => {
   }
 };
 
+// Get UMKM By ID
+const getUmkmById = async (req, res, next) => {
+  try {
+    const umkm = await Umkm.findById(req.body.id);
+    res.status(200).json(umkm);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 // Create Umkm
 const createUmkm = async (req, res, next) => {
   console.log(req.body);
@@ -70,6 +80,7 @@ const updateUmkm = async (req, res) => {
 
 module.exports = {
   getAll,
+  getUmkmById,
   createUmkm,
   deleteUmkm,
   updateUmkm
