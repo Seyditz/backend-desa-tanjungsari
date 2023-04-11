@@ -5,7 +5,7 @@ const PostController = require('../controllers/PostController');
 const authenticate = require('../middleware/authenticate');
 
 router.get('/', PostController.getAll);
-router.post('/get-by-id', PostController.getPostById);
+router.post('/get-by-id', authenticate, PostController.getPostById);
 router.post('/create', authenticate, PostController.createPost);
 router.post('/delete', authenticate, PostController.deletePost);
 router.post('/update', authenticate, PostController.updatePost);
