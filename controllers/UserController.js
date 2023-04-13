@@ -87,28 +87,34 @@ const deleteUser = (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
-  const user = await User.findById(req.body.id);
-
-  const oldPassword = CryptoJs.AES.decrypt(
-    user.password,
-    process.env.PASSWORD_SECRET
-  ).toString(CryptoJs.enc.Utf8);
-  oldPassword !== req.body.oldPassword &&
-    res.status(401).json("Wrong Password!");
-
-  if (req.body.password) {
-    req.body.password = CryptoJs.AES.encrypt(
-      req.body.password,
-      process.env.PASSWORD_SECRET
-    ).toString();
-  }
-
-  const updatedData = {
-    username: req.body.username,
-    password: req.body.password,
-  }
-
   try {
+    const user = await User.findById(req.body.id);
+
+    const oldPassword = CryptoJs.AES.decrypt(
+      user.password,
+      process.env.PASSWORD_SECRET
+    ).toString(CryptoJs.enc.Utf8) ;
+
+    console.log(oldPassword == req.body.oldPassword)
+
+    if (oldPassword !== req.body.oldPassword) {
+      res.status(401).json("Wrong Password!");
+      return
+    }
+
+    console.log("lanjut");
+
+    if (req.body.password) {
+      req.body.password = CryptoJs.AES.encrypt(
+        req.body.password,
+        process.env.PASSWORD_SECRET
+      ).toString();
+    }
+
+    const updatedData = {
+      username: req.body.username,
+      password: req.body.password,
+    };
     const updatedUser = await User.findByIdAndUpdate(
       req.body.id,
       {
@@ -130,5 +136,5 @@ module.exports = {
   register,
   login,
   deleteUser,
-  updateUser
+  updateUser,
 };
