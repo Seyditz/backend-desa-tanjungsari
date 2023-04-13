@@ -87,6 +87,15 @@ const deleteUser = (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
+  const user = await User.findById(req.body.id);
+
+  const oldPassword = CryptoJs.AES.decrypt(
+    user.password,
+    process.env.PASSWORD_SECRET
+  ).toString(CryptoJs.enc.Utf8);
+  oldPassword !== req.body.oldPassword &&
+    res.status(401).json("Wrong Password!");
+
   if (req.body.password) {
     req.body.password = CryptoJs.AES.encrypt(
       req.body.password,
