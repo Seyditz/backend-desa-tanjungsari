@@ -10,5 +10,6 @@ router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.post('/delete', authenticate, UserController.deleteUser);
 router.post('/update', authenticate, UserController.updateUser);
+router.post('/search', UserController.searchUsers);
 
 module.exports = router;

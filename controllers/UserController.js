@@ -93,13 +93,13 @@ const updateUser = async (req, res) => {
     const oldPassword = CryptoJs.AES.decrypt(
       user.password,
       process.env.PASSWORD_SECRET
-    ).toString(CryptoJs.enc.Utf8) ;
+    ).toString(CryptoJs.enc.Utf8);
 
-    console.log(oldPassword == req.body.oldPassword)
+    console.log(oldPassword == req.body.oldPassword);
 
     if (oldPassword !== req.body.oldPassword) {
       res.status(401).json("Wrong Password!");
-      return
+      return;
     }
 
     console.log("lanjut");
@@ -130,6 +130,22 @@ const updateUser = async (req, res) => {
   }
 };
 
+// Search Users
+const searchUsers = async (req, res, next) => {
+  const username = req.body.username || "";
+  try {
+    const searchedUsers = await User.paginate(
+      {
+        username: { $regex: new RegExp(username.toLowerCase(), "i") },
+      },
+      { page: req.query.page, limit: req.query.limit }
+    );
+    res.status(200).json(searchedUsers);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 module.exports = {
   getAll,
   getUserById,
@@ -137,4 +153,5 @@ module.exports = {
   login,
   deleteUser,
   updateUser,
+  searchUsers,
 };
