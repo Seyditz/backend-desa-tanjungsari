@@ -78,10 +78,27 @@ const updatePost = async (req, res) => {
   }
 };
 
+// Search Posts
+const searchPosts = async (req, res, next) => {
+  const name = req.body.name || "";
+  try {
+    const searchedPosts = await Post.paginate(
+      {
+        name: { $regex: new RegExp(name.toLowerCase(), "i") },
+      },
+      { page: req.query.page, limit: req.query.limit }
+    );
+    res.status(200).json(searchedPosts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 module.exports = {
   getAll,
   getPostById,
   createPost,
   deletePost,
-  updatePost
+  updatePost,
+  searchPosts
 };

@@ -78,10 +78,27 @@ const updateUmkm = async (req, res) => {
   }
 };
 
+// Search Umkm
+const searchUmkms = async (req, res, next) => {
+  const name = req.body.name || "";
+  try {
+    const searchedUmkms = await Umkm.paginate(
+      {
+        name: { $regex: new RegExp(name.toLowerCase(), "i") },
+      },
+      { page: req.query.page, limit: req.query.limit }
+    );
+    res.status(200).json(searchedUmkms);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 module.exports = {
   getAll,
   getUmkmById,
   createUmkm,
   deleteUmkm,
-  updateUmkm
+  updateUmkm,
+  searchUmkms
 };
