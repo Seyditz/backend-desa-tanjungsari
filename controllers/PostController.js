@@ -80,12 +80,19 @@ const updatePost = async (req, res) => {
 
 // Search Posts
 const searchPosts = async (req, res, next) => {
-  const name = req.body.name || "";
+  const {name, category} = req.body
+  const search = {}
+
+  if(name) {
+    search.name = { $regex: new RegExp(name.toLowerCase(), "i") }
+  }
+  if(category) {
+    search.category = category
+  }
+
   try {
     const searchedPosts = await Post.paginate(
-      {
-        name: { $regex: new RegExp(name.toLowerCase(), "i") },
-      },
+      search,
       { page: req.query.page, limit: req.query.limit }
     );
     res.status(200).json(searchedPosts);
